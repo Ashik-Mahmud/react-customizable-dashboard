@@ -1,10 +1,13 @@
+import { useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import TextInput from "../../components/TextInput";
+import { Link, useNavigate } from "react-router-dom";
+import TextInput from "../../components/ui/TextInput";
 import {
   emailValidationRegex,
   passwordValidationRegex,
 } from "../../config/additional.config";
+import { useAppSelector } from "../../redux/hooks";
+import { useCurrentToken } from "../../redux/store";
 
 type Props = {};
 
@@ -14,10 +17,19 @@ const SignUpPage = (props: Props) => {
     register,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+  const token = useAppSelector(useCurrentToken);
 
   const onSubmit = (data: FieldValues) => {
     console.log(data);
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard/overview");
+    }
+    return () => {};
+  }, [token]);
   return (
     <div className="max-w-lg p-10 shadow mx-auto my-40">
       <form onSubmit={handleSubmit(onSubmit)} className="auth-wrapper">

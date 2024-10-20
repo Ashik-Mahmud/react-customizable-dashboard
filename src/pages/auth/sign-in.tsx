@@ -1,10 +1,18 @@
+import { useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import TextInput from "../../components/TextInput";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import TextInput from "../../components/ui/TextInput";
 import {
   emailValidationRegex,
   passwordValidationRegex,
 } from "../../config/additional.config";
+import { IUser } from "../../redux/features/auth/auth.types";
+import { useOnLoginMutation } from "../../redux/features/auth/authApi";
+import { onLogin } from "../../redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useCurrentToken } from "../../redux/store";
+import getDecodeToken from "../../utils/getDecodeToken";
 
 type Props = {};
 
@@ -13,11 +21,41 @@ const SignInPage = (props: Props) => {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: "ashik@gmail.com",
+      password: "Ashik@123",
+    },
+  });
 
-  const onSubmit = (data: FieldValues) => {
+  const [login, { isLoading }] = useOnLoginMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const token = useAppSelector(useCurrentToken);
+
+  const onSubmit = async (data: FieldValues) => {
     console.log(data);
+    try {
+      const response = await login({
+        id: "0001",
+        password: "admin12345",
+      }).unwrap();
+      const token = response?.data?.accessToken;
+      const user = await getDecodeToken(token);
+      dispatch(onLogin({ user: user as IUser, token: token }));
+      toast.success("Login success", {});
+      navigate("/dashboard/overview");
+    } catch (error) {
+      toast.error("Something went wrong with the code", {});
+    }
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard/overview");
+    }
+    return () => {};
+  }, [token]);
   return (
     <div className="max-w-lg p-10 shadow mx-auto my-40">
       <form onSubmit={handleSubmit(onSubmit)} className="auth-wrapper">
@@ -62,8 +100,11 @@ const SignInPage = (props: Props) => {
             />
           </div>
           <div className="control">
-            <button className="px-10 w-full py-4 bg-primary text-white rounded">
-              Login
+            <button
+              className="px-10 w-full py-4 bg-primary text-white rounded disabled:opacity-40 disabled:pointer-events-none"
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Login"}
             </button>
           </div>
           <div className="control">

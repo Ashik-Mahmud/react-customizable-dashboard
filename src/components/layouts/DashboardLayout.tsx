@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import ResponsiveSidebar from "../components/shared/sidebar/Sidebar";
+import ResponsiveSidebar from "../shared/sidebar/Sidebar";
 
 type Props = {};
 
-const DashboardLayout = (props: Props) => {
+const DashboardLayout = (_props: Props) => {
   return (
     <div className="grid grid-cols-12 ">
       <ResponsiveSidebar />

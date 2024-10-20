@@ -1,14 +1,39 @@
-// Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { API_config } from '../../config/api.config'
+import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_config } from "../../config/api.config";
+import { RootState } from "../store";
 
-// Define a service using a base URL and expected endpoints
+const prepareHeaders = (
+    headers: Headers,
+    api: Pick<
+        BaseQueryApi,
+        'getState' | 'extra' | 'endpoint' | 'type' | 'forced'
+    > & { arg: string | FetchArgs },
+) => {
+    const token = (api.getState() as RootState).auth.token
+
+    // If we have a token set in state, let's assume that we should be passing it.
+    if (token) {
+        headers.set('authorization', `${token}`)
+    }
+    return headers
+
+}
+
+
+const baseQuery = fetchBaseQuery(
+    {
+        baseUrl: `${API_config.base_api}`,
+        credentials: 'include',
+        prepareHeaders
+    })
+
+
+
 export const BaseApi = createApi({
-    reducerPath: 'pokemonApi',
-    baseQuery: fetchBaseQuery({ baseUrl: `${API_config.base_api}` }),
-    endpoints: () => ({}),
-    tagTypes: ['blogs', 'addBlog']
+    reducerPath: 'baseApi',
+    baseQuery: baseQuery,
+    tagTypes: ['blogs', 'addBlog'],
+    endpoints: () => ({})
 })
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
+

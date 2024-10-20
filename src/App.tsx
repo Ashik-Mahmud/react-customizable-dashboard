@@ -1,9 +1,12 @@
-import "./App.css";
+import Container from "./components/ui/Container";
+import HeroSection from "./components/ui/TempHero";
 
 function App() {
   return (
     <div>
-      <h3 className="text-3xl">Hi</h3>
+      <Container>
+        <HeroSection />
+      </Container>
     </div>
   );
 }

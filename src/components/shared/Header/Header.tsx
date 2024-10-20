@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Container from "../Container";
-import TextLogo from "../TextLogo";
+import Container from "../../ui/Container";
+import TextLogo from "../../ui/TextLogo";
 
 const Header = () => {
   return (

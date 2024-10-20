@@ -2,7 +2,7 @@
 import { BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
 import { CgFacebook } from "react-icons/cg";
 import { SlArrowUp } from "react-icons/sl";
-import TextLogo from "../TextLogo";
+import TextLogo from "../../ui/TextLogo";
 
 type Props = {};
 

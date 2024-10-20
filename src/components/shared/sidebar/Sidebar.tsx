@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 import { IoIosCode } from "react-icons/io";
 import cn from "../../../utils/cn";
-import TextLogo from "../TextLogo";
+import TextLogo from "../../ui/TextLogo";
 import SidebarItem from "./SidebarItem";
 import SidebarProfile from "./SidebarProfile";
 import { SIDEBAR_ROUTES } from "./sidebar.config";

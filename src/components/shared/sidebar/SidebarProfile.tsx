@@ -1,12 +1,25 @@
 import { BsThreeDots } from "react-icons/bs";
 import { CiLogout } from "react-icons/ci";
 import { RiAccountCircleLine } from "react-icons/ri";
+import { onLogout } from "../../../redux/features/auth/authSlice";
+import { useGetMeQuery } from "../../../redux/features/users/usersApi";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useCurrentUser } from "../../../redux/store";
 
 type Props = {
   isCollapse: boolean;
 };
 
 const SidebarProfile = ({ isCollapse }: Props) => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(useCurrentUser);
+  const { data } = useGetMeQuery({});
+
+  const onLoginUser = () => {
+    dispatch(onLogout());
+  };
+
+  console.log(data);
   return (
     <div
       className={`${
@@ -36,7 +49,10 @@ const SidebarProfile = ({ isCollapse }: Props) => {
             <RiAccountCircleLine />
             Profile
           </li>
-          <li className="flex items-center gap-[7px] text-[0.9rem] text-red-500 hover:bg-gray-50 px-[8px] py-[4px] rounded-md cursor-pointer">
+          <li
+            onClick={onLoginUser}
+            className="flex items-center gap-[7px] text-[0.9rem] text-red-500 hover:bg-gray-50 px-[8px] py-[4px] rounded-md cursor-pointer"
+          >
             <CiLogout />
             Logout
           </li>
